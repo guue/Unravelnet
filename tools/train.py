@@ -3,8 +3,13 @@ import argparse
 import copy
 import os
 import os.path as osp
+import sys
 import time
 import warnings
+
+PROJECT_ROOT = osp.dirname(osp.dirname(osp.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 import mmcv
 import torch
@@ -23,7 +28,7 @@ from mmrotate.utils import collect_env, get_root_logger, setup_multi_processes
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument('config', help='train config file path')
+    parser.add_argument('config', default="configs/unravelnet/ORCNN_unravelnet_tiny_fpn_le90_dota10val_ss_e36.py", help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from', help='the checkpoint file to resume from')

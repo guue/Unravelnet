@@ -1,11 +1,36 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from .re_resnet import ReResNet
 
-from .pkinet import PKINet
-from .lsknet import LSKNet
-
-from .legnet import LWEGNet
 from .unravelnet import UnravelNet
 
+try:
+    from .lsknet import LSKNet
+except ModuleNotFoundError as exc:
+    if exc.name != 'timm':
+        raise
+    LSKNet = None
 
-__all__ = ['ReResNet', 'PKINet', 'LSKNet', 'LWEGNet', 'UnravelNet']
+try:
+    from .legnet import LWEGNet
+except ModuleNotFoundError as exc:
+    if exc.name != 'timm':
+        raise
+    LWEGNet = None
+
+try:
+    from .pkinet import PKINet
+except ModuleNotFoundError as exc:
+    if exc.name != 'mmengine':
+        raise
+    PKINet = None
+
+__all__ = ['ReResNet', 'UnravelNet']
+
+if LSKNet is not None:
+    __all__.append('LSKNet')
+
+if LWEGNet is not None:
+    __all__.append('LWEGNet')
+
+if PKINet is not None:
+    __all__.append('PKINet')

@@ -1,6 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import os
+from pathlib import Path
+
 import mmcv
 import mmdet
+
+if 'MPLCONFIGDIR' not in os.environ:
+    mpl_config_dir = Path(__file__).resolve().parent.parent / '.mplconfig'
+    mpl_config_dir.mkdir(exist_ok=True)
+    os.environ['MPLCONFIGDIR'] = str(mpl_config_dir)
 
 from .core import *  # noqa: F401, F403
 from .datasets import *  # noqa: F401, F403

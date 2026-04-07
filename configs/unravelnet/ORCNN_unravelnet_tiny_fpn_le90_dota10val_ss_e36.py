@@ -16,7 +16,7 @@ model = dict(
         fork_feat=True,
         drop_path_rate=0.1,
         init_cfg=dict(type='Pretrained',
-checkpoint="./backbone_weights/unravelnet_tiny.pth"),
+checkpoint=r"C:\Users\22688\Desktop\2026春\课程作业\遥感图像分析与系统\present\UntravelNet\backbone_weights"),
         pretrained=None),
     neck=dict(
         type='FPN',

@@ -2,8 +2,13 @@
 import argparse
 import os
 import os.path as osp
+import sys
 import time
 import warnings
+
+PROJECT_ROOT = osp.dirname(osp.dirname(osp.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 import mmcv
 import torch

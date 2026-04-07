@@ -27,6 +27,21 @@ except ImportError:
     shgeo = None
 
 
+class _DummyLock:
+
+    def acquire(self):
+        return None
+
+    def release(self):
+        return None
+
+
+class _LocalCounter:
+
+    def __init__(self, value=0):
+        self.value = value
+
+
 def add_parser(parser):
     """Add arguments."""
     parser.add_argument(
@@ -559,7 +574,13 @@ def main():
 
     print('Start splitting images!!!')
     start = time.time()
-    manager = Manager()
+    if args.nproc > 1:
+        manager = Manager()
+        lock = manager.Lock()
+        prog = manager.Value('i', 0)
+    else:
+        lock = _DummyLock()
+        prog = _LocalCounter(0)
     worker = partial(
         single_split,
         sizes=sizes,
@@ -571,8 +592,8 @@ def main():
         save_dir=save_imgs,
         anno_dir=save_files,
         img_ext=args.save_ext,
-        lock=manager.Lock(),
-        prog=manager.Value('i', 0),
+        lock=lock,
+        prog=prog,
         total=len(infos),
         logger=logger)
 

@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 import torch
 import torch.nn as nn
-from timm.models.layers import DropPath, trunc_normal_
 from typing import List
 from torch import Tensor
 import os
@@ -15,6 +14,32 @@ import numpy
 from torch.distributions import Normal
 import matplotlib.pyplot as plt
 from ..builder import ROTATED_BACKBONES
+
+try:
+    from timm.models.layers import DropPath, trunc_normal_
+except ModuleNotFoundError as exc:
+    if exc.name != 'timm':
+        raise
+
+    class DropPath(nn.Module):
+
+        def __init__(self, drop_prob=0.):
+            super().__init__()
+            self.drop_prob = drop_prob
+
+        def forward(self, x):
+            if self.drop_prob == 0. or not self.training:
+                return x
+            keep_prob = 1 - self.drop_prob
+            shape = (x.shape[0],) + (1,) * (x.ndim - 1)
+            random_tensor = keep_prob + torch.rand(
+                shape, dtype=x.dtype, device=x.device)
+            random_tensor.floor_()
+            return x.div(keep_prob) * random_tensor
+
+    def trunc_normal_(tensor, mean=0., std=1., a=-2., b=2.):
+        return nn.init.trunc_normal_(
+            tensor, mean=mean, std=std, a=a, b=b)
 
 try:
     from mmdet.utils import get_root_logger

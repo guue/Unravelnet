@@ -1,6 +1,7 @@
 # dataset settings
 dataset_type = 'DOTADataset'
-data_root = "/dataset/detection/DOTA10_mmrotate_split_ss/"
+# Use the local split DOTA v1.0 dataset prepared under the repository.
+data_root = 'dataset/DOTA10_mmrotate_split_ss/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
